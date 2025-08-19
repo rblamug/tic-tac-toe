@@ -114,12 +114,28 @@ function Gamecontroller(
 
     printNewRound();
 
-    return { playRound };
+    return { playRound, getBoard: game.getBoard, getActivePlayer };
 }
 
 function Screencontroller() {
-    // todo
+    const game = Gamecontroller();
+    const playerTurnHeader = document.querySelector('.turn');
+    const boardDiv = document.querySelector('.board');
+
+    const board = game.getBoard();
+
+    playerTurnHeader.textContent = `${game.getActivePlayer().name}'s turn`;
+
+    board.forEach(row => row.forEach(mark => {
+        const markButton = document.createElement('button');
+        markButton.classList.add('mark');
+        markButton.textContent = mark.getValue();
+        boardDiv.appendChild(markButton);
+    }))
+
 }
+
+Screencontroller();
 
 const game = Gamecontroller();
 game.playRound(1,1);
