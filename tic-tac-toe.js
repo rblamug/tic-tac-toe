@@ -43,10 +43,10 @@ function Gameboard() {
 
     const markBoard = (row, column, player) => {
         const spot = board[row][column];
-        if (spot.getValue() === 0) {
+        if (spot.getValue() === "") {
             spot.addMark(player);
         } else {
-            return;
+            markBoard(row, column, player);
         }
     }
 
@@ -57,7 +57,7 @@ function Gameboard() {
 
 //function for each spot in the tic tac toe board
 function Mark() {
-    let value = 0;
+    let value = "";
 
     const addMark = (player) => {
         value = player;
@@ -75,11 +75,11 @@ function Gamecontroller(
     const players = [
         {
             name: playerOneName,
-            mark: 1
+            mark: "O"
         },
         {
             name: playerTwoName,
-            mark: 2
+            mark: "X"
         }
     ];
 
@@ -103,13 +103,13 @@ function Gamecontroller(
         game.markBoard(row, column, getActivePlayer().mark);
 
         if (game.checkForWinner()) {
-            console.log(`${getActivePlayer().name} wins!`);
+            alert(`${getActivePlayer().name} wins!`);
             game.printBoard();
             return;
+        } else {
+            switchPlayerTurn();
+            printNewRound();
         }
-
-        switchPlayerTurn();
-        printNewRound();
     }
 
     printNewRound();
@@ -122,24 +122,28 @@ function Screencontroller() {
     const playerTurnHeader = document.querySelector('.turn');
     const boardDiv = document.querySelector('.board');
 
-    const board = game.getBoard();
+    const updateScreen = () => {
+        boardDiv.textContent = "";
 
-    playerTurnHeader.textContent = `${game.getActivePlayer().name}'s turn`;
+        const board = game.getBoard();
 
-    board.forEach(row => row.forEach(mark => {
-        const markButton = document.createElement('button');
-        markButton.classList.add('mark');
-        markButton.textContent = mark.getValue();
-        boardDiv.appendChild(markButton);
-    }))
+        playerTurnHeader.textContent = `${game.getActivePlayer().name}'s turn`;
+        
+        board.forEach((row, rowIndex) => row.forEach((mark, colIndex) => {
+            const markButton = document.createElement('button');
+            markButton.classList.add('mark');
+            markButton.textContent = mark.getValue();
+            boardDiv.appendChild(markButton);
+
+            markButton.addEventListener('click', (e) => {
+                game.playRound(rowIndex, colIndex);
+                updateScreen();
+            });
+        }));
+    };
+
+    updateScreen();
 
 }
 
 Screencontroller();
-
-const game = Gamecontroller();
-game.playRound(1,1);
-game.playRound(2,1);
-game.playRound(0,0);
-game.playRound(2,0);
-game.playRound(2,2);
