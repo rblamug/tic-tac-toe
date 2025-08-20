@@ -14,6 +14,7 @@ function Gameboard() {
 
     const checkForWinner = () => {
         const all = allValues();
+        // put all values together to find winning combos
         const concatArray = all[0].concat(all[1], all[2]);
 
         const winningCombos = [
@@ -32,10 +33,13 @@ function Gameboard() {
                 concatArray[a] === concatArray[b] &&
                 concatArray[b] === concatArray[c] 
             ) {
-                return true;
+                return 1;
+            } else if (!(concatArray.includes(''))) {
+                return 2;
             }
         }
     }
+
 
     const printBoard = () => {
         console.log(allValues());
@@ -68,6 +72,7 @@ function Mark() {
     return { addMark, getValue };
 }
 
+// controls the game
 function Gamecontroller(
     playerOneName = 'Player One',
     playerTwoName = 'Player Two'
@@ -102,21 +107,26 @@ function Gamecontroller(
     const playRound = (row, column) => {
         game.markBoard(row, column, getActivePlayer().mark);
 
-        if (game.checkForWinner()) {
+        if (game.checkForWinner() === 1) {
             alert(`${getActivePlayer().name} wins!`);
             game.printBoard();
+            return;
+        } else if (game.checkForWinner() === 2) {
+            alert('Game ends in a tie!')
             return;
         } else {
             switchPlayerTurn();
             printNewRound();
         }
-    }
+    };
+    
 
     printNewRound();
 
     return { playRound, getBoard: game.getBoard, getActivePlayer };
 }
 
+// controls the game from DOM
 function Screencontroller() {
     const game = Gamecontroller();
     const playerTurnHeader = document.querySelector('.turn');
