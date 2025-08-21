@@ -78,6 +78,7 @@ function Gamecontroller() {
 
     const playerOne = document.getElementById('player-one-name');
     const playerTwo = document.getElementById('player-two-name');
+    const resultDisplay = document.querySelector('.display-winner');
     const playerOneName = playerOne.value;
     const playerTwoName = playerTwo.value;
 
@@ -113,23 +114,27 @@ function Gamecontroller() {
 
         if (game.checkForWinner() === 1) {
             // todo: update element to display winner
-            alert(`${getActivePlayer().name} wins!`);
+            resultDisplay.textContent = `${getActivePlayer().name} wins!`
             game.printBoard();
             return;
         } else if (game.checkForWinner() === 2) {
             // todo: update element to display tie
-            alert('Game ends in a tie!')
+            resultDisplay.textContent = "Game ends in a tie!";
             return;
         } else {
             switchPlayerTurn();
             printNewRound();
         }
     };
+
+    const clearResult = () => {
+        resultDisplay.textContent = '';
+    }
     
 
     printNewRound();
 
-    return { playRound, getBoard: game.getBoard, getActivePlayer };
+    return { playRound, getBoard: game.getBoard, getActivePlayer, clearResult };
 }
 
 // controls the game from DOM
@@ -141,6 +146,7 @@ function Screencontroller() {
 
     restart.addEventListener('click', () => {
         Screencontroller();
+        game.clearResult();
     })
 
     const updateScreen = () => {
