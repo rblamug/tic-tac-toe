@@ -29,14 +29,15 @@ function Gameboard() {
         ];
 
         for (const [a,b,c] of winningCombos) {
+
             if (concatArray[a] &&
                 concatArray[a] === concatArray[b] &&
-                concatArray[b] === concatArray[c] 
-            ) {
+                concatArray[b] === concatArray[c]) {
                 return 1;
-            } else if (!(concatArray.includes(''))) {
-                return 2;
             }
+        }
+        if (!concatArray.includes('')) {
+            return 2;
         }
     }
 
@@ -73,10 +74,13 @@ function Mark() {
 }
 
 // controls the game
-function Gamecontroller(
-    playerOneName = 'Player One',
-    playerTwoName = 'Player Two'
-) {
+function Gamecontroller() {
+
+    const playerOne = document.getElementById('player-one-name');
+    const playerTwo = document.getElementById('player-two-name');
+    const playerOneName = playerOne.value;
+    const playerTwoName = playerTwo.value;
+
     const players = [
         {
             name: playerOneName,
@@ -108,10 +112,12 @@ function Gamecontroller(
         game.markBoard(row, column, getActivePlayer().mark);
 
         if (game.checkForWinner() === 1) {
+            // todo: update element to display winner
             alert(`${getActivePlayer().name} wins!`);
             game.printBoard();
             return;
         } else if (game.checkForWinner() === 2) {
+            // todo: update element to display tie
             alert('Game ends in a tie!')
             return;
         } else {
@@ -131,6 +137,11 @@ function Screencontroller() {
     const game = Gamecontroller();
     const playerTurnHeader = document.querySelector('.turn');
     const boardDiv = document.querySelector('.board');
+    const restart = document.querySelector('.restart');
+
+    restart.addEventListener('click', () => {
+        Screencontroller();
+    })
 
     const updateScreen = () => {
         boardDiv.textContent = "";
@@ -157,3 +168,5 @@ function Screencontroller() {
 }
 
 Screencontroller();
+
+

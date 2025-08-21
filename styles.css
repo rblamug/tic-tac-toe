@@ -1,3 +1,8 @@
+body {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+}
+
 h1 {
     text-align: center;
 }
@@ -11,7 +16,33 @@ h1 {
     margin: auto;
 }
 
-button {
+.mark {
     background-color: white;
     font-size: 7rem;
+}
+
+.restart-container {
+    text-align: center;
+    padding-top: 2rem;
+}
+
+.restart {
+    padding: 1rem;
+    font-size: 1rem;
+    width: 200px;
+}
+
+body > div:nth-child(1) {
+    display: flex;
+    height: 300px;
+    text-align: left;
+    align-self: center;
+    flex-direction: column;
+    gap: 2rem;
+    margin-left: 2rem;
+}
+
+label,
+input {
+    font-size: 1.5rem;
 }
